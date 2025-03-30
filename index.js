@@ -46,11 +46,7 @@ async function run() {
 
         })
 
-        // app.post('/AllCars',async(req,res)=>{
-        //     const  data = req.body
-        //     const result = await AllCarsCollention.insertOne(data)
-        //     res.send(result)
-        // })
+        
         // CostomersCollection
         app.get('/Costomer', async (req, res) => {
             const result = await CostomersCollection.find().toArray()
@@ -79,9 +75,7 @@ async function run() {
             res.send(result)
 
         })
-
-
-
+ 
         // MyCarsCollection Post
 
         app.post('/MyCars', async (req, res) => {
@@ -100,35 +94,30 @@ async function run() {
 
         app.delete('/MyCars/:id', async (req, res) => {
             const id = req.params.id
-            //  console.log(id)
+             console.log(id)
             const queary = { _id: new ObjectId(id) }
             const result = await MyCarsCollection.deleteOne(queary)
             res.send(result)
         })
+ 
+        // my car update
+        app.put("/MyCars/:id", async (req, res) => {
+            const { id } = req.params;
+            const updateData = req.body;
+            try {
+                const result = await Car.updateOne({ _id: id }, { $set: updateData });
+                if (result.modifiedCount === 0) {
+                    return res.status(404).json({ message: "Car not found or no changes made" });
+                }
+                res.json({ message: "Car updated successfully" });
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
 
-
-
-// my car update
-app.put("/MyCars/:id", async (req, res) => {
-    const { id } = req.params;
-    const updateData = req.body;
-    try {
-      const result = await Car.updateOne({ _id: id }, { $set: updateData });
-      if (result.modifiedCount === 0) {
-        return res.status(404).json({ message: "Car not found or no changes made" });
-      }
-      res.json({ message: "Car updated successfully" });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  
-
-
-
-
+ 
         // BookingCars
-        app.post('/BookingCar',async(req,res)=>{
+        app.post('/BookingCar', async (req, res) => {
             const data = req.body
             const result = await BookingCarsCollection.insertOne(data)
             res.send(result)
@@ -142,7 +131,8 @@ app.put("/MyCars/:id", async (req, res) => {
 
         })
 
-
+ 
+       
 
 
 
